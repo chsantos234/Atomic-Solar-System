@@ -11,7 +11,6 @@ noise = new SimplexNoise(),
 cameraSpeed = 0,
 blobScale = 3;
 
-
 init();
 animate();
 
@@ -20,6 +19,8 @@ var venus;
 var earth;
 var mars;
 var jupyter;
+var shipObj;
+var dstar;
 
 function init() {
     scene = new THREE.Scene();
@@ -61,11 +62,13 @@ function init() {
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.autoRotate = true;
     controls.autoRotateSpeed = 4;
-    controls.maxDistance = 350;
+    controls.maxDistance = 500;
     controls.minDistance = 150;
     controls.enablePan = false;
 
     const loader = new THREE.TextureLoader();
+    const assetLoader = new THREE.GLTFLoader();
+
     const textureSphereBg = loader.load('https://i.ibb.co/4gHcRZD/bg3-je3ddz.jpg');
     const textureSun = loader.load('https://i.ibb.co/hcN2qXk/star-nc8wkw.jpg');
     const textureStar = loader.load("https://i.ibb.co/ZKsdYSz/p1-g3zb2a.png");
@@ -79,6 +82,10 @@ function init() {
     const earthTexture =  loader.load("https://i.ibb.co/59Yrgqk/earth.png");
     const jupyterTexture =  loader.load("https://i.ibb.co/d4ZTVwY/jupiter.png");
     const moonTexture =  loader.load("https://i.ibb.co/fCyx3JD/moon.jpg");
+
+    const shipModelUrl = '../models/ship/ship.glb';
+    const pyrModelUrl = '../models/pyramid/pyramid.glb';
+    const dstarModelUrl = '../models/dstar/dstar.glb';
 
 
     /*
@@ -153,6 +160,46 @@ function init() {
     });
     sphereBg = new THREE.Mesh(geometrySphereBg, materialSphereBg);
     scene.add(sphereBg);
+
+    shipObj = new THREE.Object3D();
+    scene.add(shipObj)
+    let shipModel;
+    assetLoader.load(shipModelUrl, gltf => {
+        shipModel = gltf.scene
+        shipObj.add(shipModel)
+        shipModel.position.x = 45
+        shipModel.rotateX(3.1)
+        shipModel.rotateZ(5)
+        shipModel.scale.set(2,2,2)
+    });
+
+    pyramiObj = new THREE.Object3D();
+    scene.add(pyramiObj)
+    let pyramid1;
+    assetLoader.load(pyrModelUrl, gltf => {
+        pyramid1 = gltf.scene
+        pyramiObj.add(pyramid1)
+        pyramid1.position.x = 170
+        //shipModel.position.set(20, 0, 0);
+        //pyramid1.rotateX(3.1)
+        pyramid1.rotateY(25)
+        pyramid1.scale.set(0.05, 0.05, 0.05)
+    });
+
+    dstarObj = new THREE.Object3D();
+    dstarObj.rotateY(60);
+    scene.add(dstarObj)
+    assetLoader.load(dstarModelUrl, gltf => {
+        dstar = gltf.scene
+        dstarObj.add(dstar)
+        dstar.position.x = 60
+        dstar.position.y = 30
+        //shipModel.position.set(20, 0, 0);
+        //dstar.rotateX(3.1)
+        //dstar.rotateY(25)
+        //dstar.rotateY(10)
+        dstar.scale.set(0.1, 0.1, 0.1)
+    });
 
 
     /*    Moving Stars   */
@@ -249,6 +296,10 @@ function animate() {
     sun.geometry.computeVertexNormals();
     sun.geometry.computeFaceNormals();
     //sun.rotation.y += 0.002;
+
+    shipObj.rotateZ(0.01);
+
+    //dstar.rotateY(0.02);
 
     mercury.obj.rotateY(0.01);
     mercury.obj.rotateZ(0.01);
