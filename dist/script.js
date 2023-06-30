@@ -9,7 +9,7 @@ container = document.getElementById("canvas_container"),
 timeout_Debounce,
 noise = new SimplexNoise(),
 cameraSpeed = 0,
-blobScale = 3;
+blobScale = .8;
 
 init();
 animate();
@@ -20,7 +20,7 @@ var earth;
 var mars;
 var jupyter;
 var shipObj;
-var dstar;
+var deathStar;
 
 function init() {
     scene = new THREE.Scene();
@@ -85,7 +85,7 @@ function init() {
 
     const shipModelUrl = '../models/ship/ship.glb';
     const pyrModelUrl = '../models/pyramid/pyramid.glb';
-    const dstarModelUrl = '../models/dstar/dstar.glb';
+    const deathStarModelUrl = '../models/dstar/dstar.glb';
 
 
     /*
@@ -137,6 +137,7 @@ function init() {
         side: THREE.DoubleSide,
         transparent: false
     });
+
     var sunRing1 = new THREE.Mesh(sunTorusGeo, sunRingMat);
     var sunRing2 = new THREE.Mesh(sunTorusGeo, sunRingMat);
     var sunRing3 = new THREE.Mesh(sunTorusGeo, sunRingMat);
@@ -151,9 +152,9 @@ function init() {
 
     
 
-    /*    Sphere  Background   */
+    /*    Sphere Background   */
     textureSphereBg.anisotropy = 16;
-    let geometrySphereBg = new THREE.SphereBufferGeometry(150, 40, 40);
+    let geometrySphereBg = new THREE.SphereBufferGeometry(250, 40, 40);
     let materialSphereBg = new THREE.MeshBasicMaterial({
         side: THREE.BackSide,
         map: textureSphereBg,
@@ -165,7 +166,7 @@ function init() {
     scene.add(shipObj)
     let shipModel;
     assetLoader.load(shipModelUrl, gltf => {
-        shipModel = gltf.scene
+        shipModel = gltf.scene        
         shipObj.add(shipModel)
         shipModel.position.x = 45
         shipModel.rotateX(3.1)
@@ -173,12 +174,13 @@ function init() {
         shipModel.scale.set(2,2,2)
     });
 
-    pyramiObj = new THREE.Object3D();
-    scene.add(pyramiObj)
+    /* Pyramid Vessel */
+    pyramidObj = new THREE.Object3D();
+    scene.add(pyramidObj)
     let pyramid1;
     assetLoader.load(pyrModelUrl, gltf => {
         pyramid1 = gltf.scene
-        pyramiObj.add(pyramid1)
+        pyramidObj.add(pyramid1)
         pyramid1.position.x = 170
         //shipModel.position.set(20, 0, 0);
         //pyramid1.rotateX(3.1)
@@ -186,19 +188,19 @@ function init() {
         pyramid1.scale.set(0.05, 0.05, 0.05)
     });
 
-    dstarObj = new THREE.Object3D();
-    dstarObj.rotateY(60);
-    scene.add(dstarObj)
-    assetLoader.load(dstarModelUrl, gltf => {
-        dstar = gltf.scene
-        dstarObj.add(dstar)
-        dstar.position.x = 60
-        dstar.position.y = 30
+    deathStarObj = new THREE.Object3D();
+    deathStarObj.rotateY(60);
+    scene.add(deathStarObj)
+    assetLoader.load(deathStarModelUrl, gltf => {
+        deathStar = gltf.scene
+        deathStarObj.add(deathStar)
+        deathStar.position.x = 60
+        deathStar.position.y = 30
         //shipModel.position.set(20, 0, 0);
-        //dstar.rotateX(3.1)
-        //dstar.rotateY(25)
-        //dstar.rotateY(10)
-        dstar.scale.set(0.1, 0.1, 0.1)
+        //deathStar.rotateX(3.1)
+        //deathStar.rotateY(25)
+        //deathStar.rotateY(10)
+        deathStar.scale.set(0.1, 0.1, 0.1)
     });
 
 
@@ -234,7 +236,7 @@ function init() {
         let pointGeometry = new THREE.Geometry();
         let pointMaterial = new THREE.PointsMaterial({
             size: size,
-            map: texture,
+            map: texture,            
             blending: THREE.AdditiveBlending,                      
         });
 
@@ -245,9 +247,10 @@ function init() {
         }
         return new THREE.Points(pointGeometry, pointMaterial);
     }
-    scene.add(createStars(texture1, 15, 20));   
+    scene.add(createStars(texture1, 1, 20));   
     scene.add(createStars(texture2, 5, 5));
-    scene.add(createStars(texture4, 7, 5));
+    scene.add(createStars(texture4, 4, 5));
+    
 
 
     function randomPointSphere (radius) {
@@ -297,17 +300,25 @@ function animate() {
     sun.geometry.computeFaceNormals();
     //sun.rotation.y += 0.002;
 
-    shipObj.rotateZ(0.01);
+    //shipObj.rotateX(0.01);
+    //shipObj.rotateY(0.02);
+    
+    shipObj.rotateZ(0.03);
 
-    //dstar.rotateY(0.02);
+    //deathStar.rotateY(0.02);
 
     mercury.obj.rotateY(0.01);
     mercury.obj.rotateZ(0.01);
+    mercury.mesh.rotateY(0.04);
+    
 
     jupyter.obj.rotateZ(0.015);
     jupyter.obj.rotateY(-0.015);
+    jupyter.mesh.rotateY(0.01);
 
     venus.obj.rotateZ(0.01);
+    venus.mesh.rotateY(0.04);
+
 
     earth.obj.rotateY(0.01);
     earth.mesh.rotateY(0.02);
