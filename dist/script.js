@@ -58,11 +58,11 @@ function init() {
     
     container.appendChild(renderer.domElement);
 
-    //OrbitControl
+    /* Orbit Controls */
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 4;
-    controls.maxDistance = 500;
+    controls.autoRotateSpeed = 3;
+    controls.maxDistance = 600;
     controls.minDistance = 150;
     controls.enablePan = false;
 
@@ -135,7 +135,7 @@ function init() {
     const sunTorusGeo = new THREE.TorusGeometry(100, 0.2, 20, 100);
     var sunRingMat = new THREE.MeshBasicMaterial({
         side: THREE.DoubleSide,
-        transparent: false
+        transparent: true
     });
 
     var sunRing1 = new THREE.Mesh(sunTorusGeo, sunRingMat);
@@ -150,6 +150,20 @@ function init() {
     sunRing3.rotation.x = 0.25 * Math.PI
     sunRing4.rotation.x = 0.75 * Math.PI
 
+    const opacitySlider = document.getElementById('opacity-slider');
+    opacitySlider.addEventListener('input', function () {
+        const opacityValue = parseFloat(this.value);
+        sunRing1.material.opacity = opacityValue;
+        /*sunRing1.material.transparent = opacityValue <1;
+        sunRing2.material.opacity = opacityValue;
+        sunRing2.material.transparent = opacityValue < 1;
+        sunRing3.material.opacity = opacityValue;
+        sunRing3.material.transparent = opacityValue < 1;
+        sunRing4.material.opacity = opacityValue;
+        sunRing4.material.transparent = opacityValue < 1;*/
+    });
+
+
     
 
     /*    Sphere Background   */
@@ -162,6 +176,7 @@ function init() {
     sphereBg = new THREE.Mesh(geometrySphereBg, materialSphereBg);
     scene.add(sphereBg);
 
+    /* Sun Ship */
     shipObj = new THREE.Object3D();
     scene.add(shipObj)
     let shipModel;
@@ -174,7 +189,7 @@ function init() {
         shipModel.scale.set(2,2,2)
     });
 
-    /* Pyramid Vessel */
+    /* Pyramid Vessel 1 */
     pyramidObj = new THREE.Object3D();
     scene.add(pyramidObj)
     let pyramid1;
@@ -182,12 +197,31 @@ function init() {
         pyramid1 = gltf.scene
         pyramidObj.add(pyramid1)
         pyramid1.position.x = 170
-        //shipModel.position.set(20, 0, 0);
-        //pyramid1.rotateX(3.1)
         pyramid1.rotateY(25)
-        pyramid1.scale.set(0.05, 0.05, 0.05)
+        pyramid1.scale.set(0.08, 0.08, 0.08)
     });
 
+    /* Pyramid Vessel 2 */
+    let pyramid2;
+    assetLoader.load(pyrModelUrl, gltf => {
+        pyramid2 = gltf.scene
+        pyramidObj.add(pyramid2)
+        pyramid2.position.set(158, -10, 0);
+        pyramid2.rotateY(25)
+        pyramid2.scale.set(0.05, 0.05, 0.05)
+    });
+
+    /* Pyramid Vessel 3 */
+    let pyramid3;
+    assetLoader.load(pyrModelUrl, gltf => {
+        pyramid3 = gltf.scene
+        pyramidObj.add(pyramid3)
+        pyramid3.position.set(182, 5, -5);
+        pyramid3.rotateY(25)
+        pyramid3.scale.set(0.05, 0.05, 0.05)
+    });
+
+    /* Death Star */
     deathStarObj = new THREE.Object3D();
     deathStarObj.rotateY(60);
     scene.add(deathStarObj)
@@ -196,10 +230,6 @@ function init() {
         deathStarObj.add(deathStar)
         deathStar.position.x = 60
         deathStar.position.y = 30
-        //shipModel.position.set(20, 0, 0);
-        //deathStar.rotateX(3.1)
-        //deathStar.rotateY(25)
-        //deathStar.rotateY(10)
         deathStar.scale.set(0.1, 0.1, 0.1)
     });
 
@@ -347,15 +377,6 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
 }
-
-var opacitySlider = document.getElementById('opacity-slider');
-opacitySlider.addEventListener('input', function() {
-  var opacityValue = parseFloat(opacitySlider.value);
-  sun.sunRing1.material.opacity = opacityValue;
-  sun.sunRing2.material.opacity = opacityValue;
-  sun.sunRing3.material.opacity = opacityValue;
-  sun.sunRing4.material.opacity = opacityValue;
-});
 
 // document.addEventListener("DOMContentLoaded", function() {
 //     var slider = document.getElementById("opacity-slider");
