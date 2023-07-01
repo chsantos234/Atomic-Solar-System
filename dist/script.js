@@ -55,11 +55,7 @@ function init() {
     const loader = new THREE.TextureLoader();
     const assetLoader = new THREE.GLTFLoader();
 
-    const textureSphereBg = loader.load('https://i.ibb.co/4gHcRZD/bg3-je3ddz.jpg');    
-    
-    //const textureSphereBg = loader.load("https://i.ibb.co/RzkHJtw/wp4575209.png");
-    //const textureSphereBg = loader.load("https://i.ibb.co/jWLFRzs/galaxia.jpg");
-    
+    const textureSphereBg = loader.load('https://i.ibb.co/4gHcRZD/bg3-je3ddz.jpg');        
     const textureStar1 = loader.load("https://i.ibb.co/ZKsdYSz/p1-g3zb2a.png");
     const textureStar2 = loader.load("https://i.ibb.co/F8by6wW/p2-b3gnym.png");
     const textureStar3 = loader.load("https://i.ibb.co/yYS2yx5/p3-ttfn70.png");
