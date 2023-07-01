@@ -15,7 +15,12 @@ canvas {
 
 #canvas_container {
     width: 100vw;
-    height: 97%;
+    height: 100%;
+}
+
+#canvas_container input{
+    position: absolute;
+    z-index: 999;
 }
 
 button {
@@ -39,3 +44,10 @@ button:hover {
     background: #ffffff;
     color: #000000;
 }
+
+.opacity-slider {
+    position: fixed;
+    top: 2px; /* Adjust the top value as needed */
+    left: 0px; /* Adjust the left value as needed */
+    z-index: 9; /* Set the z-index value to make sure it appears on top */
+  }
