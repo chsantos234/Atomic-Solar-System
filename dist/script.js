@@ -1,3 +1,7 @@
+//Discentes: 
+//Eude Monteiro da Hora (202004940004)
+//Camilo Henrique Martins dos Santos (202004940027)
+
 let renderer,
     scene,
     camera,
