@@ -18,10 +18,11 @@ var mercury;
 var venus;
 var earth;
 var mars;
+var moon;
 var jupyter;
 var shipObj;
 var pyramidObj;
-var deathStar;
+var deathStarObj;
 
 function init() {
     scene = new THREE.Scene();
@@ -31,7 +32,7 @@ function init() {
 
     const pointLight = new THREE.PointLight(0xFFFFFF, 5, 300);
     scene.add(pointLight);
-    
+
     renderer = new THREE.WebGLRenderer({
         antialias: true,
         alpha: true
@@ -55,7 +56,7 @@ function init() {
     const loader = new THREE.TextureLoader();
     const assetLoader = new THREE.GLTFLoader();
 
-    const textureSphereBg = loader.load('https://i.ibb.co/4gHcRZD/bg3-je3ddz.jpg');        
+    const textureSphereBg = loader.load('https://i.ibb.co/4gHcRZD/bg3-je3ddz.jpg');
     const textureStar1 = loader.load("https://i.ibb.co/ZKsdYSz/p1-g3zb2a.png");
     const textureStar2 = loader.load("https://i.ibb.co/F8by6wW/p2-b3gnym.png");
     const textureStar3 = loader.load("https://i.ibb.co/yYS2yx5/p3-ttfn70.png");
@@ -102,11 +103,12 @@ function init() {
     /*  Earth rotation axis  */
     earth.mesh.rotateZ(0.5);
 
+    /* Moon */
     const moonGeo = new THREE.IcosahedronGeometry(4.08, 30, 30);
     const moonMat = new THREE.MeshPhongMaterial({
         map: moonTexture, transparent: false
     });
-    const moon = new THREE.Mesh(moonGeo, moonMat);
+    moon = new THREE.Mesh(moonGeo, moonMat);
     const moonObj = new THREE.Object3D();
     moon.position.x = 25;
     earth.mesh.add(moonObj);
@@ -213,7 +215,7 @@ function init() {
     deathStarObj.rotateY(60);
     scene.add(deathStarObj)
     assetLoader.load(deathStarModelUrl, gltf => {
-        deathStar = gltf.scene
+        let deathStar = gltf.scene
         deathStarObj.add(deathStar)
         deathStar.position.x = 60
         deathStar.position.y = 30
@@ -300,7 +302,7 @@ function animate() {
     });
 
 
-    //Nucleus Animation
+    //Sun Animation
     sun.geometry.vertices.forEach(function (v) {
         let time = Date.now();
         v.normalize();
@@ -336,13 +338,14 @@ function animate() {
     earth.obj.rotateY(0.01);
     earth.mesh.rotateY(0.02);
 
+    moon.rotateY(0.03);
+
     pyramidObj.rotateY(0.001);
-    
-    //Sphere Beckground Animation
+
+    //Sphere Background Animation
     sphereBg.rotation.x += 0.002;
     sphereBg.rotation.y += 0.002;
     sphereBg.rotation.z += 0.002;
-
 
     controls.update();
     stars.geometry.verticesNeedUpdate = true;
